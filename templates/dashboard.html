@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0f">
+<title>MASTER HOSTING — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@500;700;900&family=Cinzel:wght@600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+    :root {
+        --gold-1: #fcd34d;
+        --gold-2: #fbbf24;
+        --gold-3: #d97706;
+        --gold-4: #b45309;
+        --black-1: #0a0a0f;
+        --black-2: #14141c;
+        --black-3: #1f1f2e;
+        --black-4: #2a2a3d;
+        --text-1: #fff8e7;
+        --text-2: #c4a86b;
+        --text-3: #786740;
+        --line-gold: rgba(251, 191, 36, 0.18);
+        --line-gold-strong: rgba(251, 191, 36, 0.55);
+        --ok: #4ade80;
+        --warn: #fbbf24;
+        --err: #fb7185;
+        --grad-gold: linear-gradient(135deg, var(--gold-1), var(--gold-2) 50%, var(--gold-3));
+        --grad-soft: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(217, 119, 6, 0.1));
+        --card-bg: linear-gradient(160deg, rgba(35, 28, 15, 0.85), rgba(15, 12, 6, 0.92));
+        --shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+        --ease: cubic-bezier(.4, 0, .2, 1);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100dvh; overflow-x: hidden; }
+    body {
+        font-family: 'Inter', system-ui, sans-serif;
+        background: var(--black-1);
+        color: var(--text-1);
+        font-size: 13.5px;
+        line-height: 1.5;
+        background:
+            radial-gradient(ellipse 80% 40% at 50% 0%, rgba(251, 191, 36, 0.08), transparent 60%),
+            var(--black-1);
+        min-height: 100dvh;
+        padding-bottom: 20px;
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--line-gold-strong); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold-2); }
+
+    .bg-grid {
+        position: fixed; inset: 0; z-index: 0;
+        background-image:
+            linear-gradient(rgba(251, 191, 36, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(251, 191, 36, 0.03) 1px, transparent 1px);
+        background-size: 52px 52px;
+        mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 75%);
+        -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 75%);
+        pointer-events: none;
+    }
+
+    /* ============ HEADER ============ */
+    .header {
+        background: rgba(10, 10, 15, 0.85);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--line-gold);
+        padding: 16px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky; top: 0;
+        z-index: 100;
+        padding-top: calc(16px + env(safe-area-inset-top));
+    }
+    .logo-wrap { display: flex; align-items: center; gap: 14px; }
+    .logo-mark {
+        width: 44px; height: 44px;
+        border-radius: 12px;
+        background: var(--grad-gold);
+        display: grid; place-items: center;
+        font-size: 20px; color: #1a1408;
+        box-shadow: 0 0 20px rgba(251, 191, 36, 0.35);
+    }
+    .logo-text h1 {
+        font-family: 'Cinzel', serif;
+        font-size: 20px; font-weight: 900;
+        letter-spacing: 1px;
+        line-height: 1;
+        background: linear-gradient(135deg, #fff8e7, var(--gold-2));
+        -webkit-background-clip: text; background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .logo-text small {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 8px; color: var(--gold-3);
+        letter-spacing: 3px;
+        display: block;
+        margin-top: 3px;
+        font-weight: 700;
+    }
+    .user-info { display: flex; align-items: center; gap: 12px; }
+    .user-chip {
+        display: flex; align-items: center; gap: 8px;
+        padding: 6px 14px 6px 6px;
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid var(--line-gold);
+        border-radius: 25px;
+        font-size: 12px; font-weight: 600;
+    }
+    .user-avatar {
+        width: 28px; height: 28px;
+        border-radius: 50%;
+        background: var(--grad-gold);
+        display: grid; place-items: center;
+        color: #1a1408;
+        font-weight: 900;
+        font-size: 13px;
+    }
+    .user-chip span { color: var(--gold-2); }
+    .logout-btn {
+        background: rgba(251, 113, 133, 0.1);
+        color: #fb7185;
+        border: 1px solid rgba(251, 113, 133, 0.3);
+        padding: 9px 16px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 12px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        transition: all 0.2s;
+    }
+    .logout-btn:hover {
+        background: #fb7185;
+        color: #fff;
+        transform: translateY(-1px);
+    }
+
+    /* ============ LAYOUT ============ */
+    .container {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 24px 24px 40px;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* ============ STATS ============ */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 14px;
+        margin-bottom: 24px;
+    }
+    .stat-card {
+        background: var(--card-bg);
+        border: 1px solid var(--line-gold);
+        border-radius: 16px;
+        padding: 20px 18px;
+        text-align: center;
+        backdrop-filter: blur(20px);
+        transition: all 0.3s var(--ease);
+        position: relative;
+        overflow: hidden;
+    }
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; height: 2px;
+        background: var(--grad-gold);
+        opacity: 0.7;
+    }
+    .stat-card:hover {
+        transform: translateY(-3px);
+        border-color: var(--line-gold-strong);
+        box-shadow: 0 12px 30px rgba(251, 191, 36, 0.15);
+    }
+    .stat-card i {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+        background: var(--grad-gold);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text;
+        display: inline-block;
+    }
+    .stat-card h3 {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1.8rem; font-weight: 900;
+        color: var(--gold-1);
+        margin-bottom: 4px;
+    }
+    .stat-card p {
+        font-size: 11px;
+        color: var(--text-2);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-weight: 700;
+    }
+    .unlimited-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: linear-gradient(135deg, var(--gold-2), var(--gold-3));
+        color: #1a1408;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 9px; font-weight: 900;
+        margin-top: 8px;
+        letter-spacing: 1px;
+    }
+
+    /* ============ CARDS ============ */
+    .card {
+        background: var(--card-bg);
+        border: 1px solid var(--line-gold);
+        border-radius: 20px;
+        padding: 28px;
+        margin-bottom: 24px;
+        backdrop-filter: blur(20px);
+        animation: slideUp 0.4s ease;
+    }
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(15px); }
+        to   { opacity: 1; transform: none; }
+    }
+    .section-title {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 14px; font-weight: 800;
+        letter-spacing: 2px;
+        color: var(--gold-2);
+        margin-bottom: 22px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-transform: uppercase;
+    }
+    .section-title i { font-size: 16px; }
+    .section-title .count-badge {
+        margin-left: auto;
+        font-size: 10px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        background: var(--grad-soft);
+        color: var(--gold-2);
+        border: 1px solid var(--line-gold-strong);
+    }
+
+    /* ============ FORM ============ */
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 14px;
+        margin-bottom: 20px;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-group label {
+        color: var(--text-2);
+        font-size: 11px; font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        display: flex; align-items: center; gap: 6px;
+    }
+    .form-group label i { color: var(--gold-3); }
+    .form-control {
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid var(--line-gold);
+        border-radius: 12px;
+        padding: 13px 16px;
+        color: var(--text-1);
+        font-family: inherit;
+        font-size: 14px;
+        transition: all 0.3s;
+    }
+    .form-control::placeholder { color: var(--text-3); }
+    .form-control:focus {
+        outline: none;
+        border-color: var(--gold-2);
+        background: rgba(0, 0, 0, 0.5);
+        box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.12),
+                    0 0 20px rgba(251, 191, 36, 0.15);
+    }
+    .form-hint {
+        font-size: 10.5px;
+        color: var(--text-3);
+        margin-top: 4px;
+    }
+
+    .file-upload {
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        margin: 20px 0;
+    }
+    .file-upload input[type="file"] {
+        position: absolute; inset: 0;
+        opacity: 0; cursor: pointer;
+        width: 100%; height: 100%;
+    }
+    .file-label {
+        background: rgba(251, 191, 36, 0.04);
+        border: 2px dashed var(--line-gold-strong);
+        border-radius: 14px;
+        padding: 30px 20px;
+        text-align: center;
+        transition: all 0.3s;
+    }
+    .file-label:hover {
+        background: rgba(251, 191, 36, 0.08);
+        border-color: var(--gold-2);
+    }
+    .file-label i {
+        font-size: 2.2rem;
+        margin-bottom: 10px;
+        color: var(--gold-2);
+        display: block;
+    }
+    .file-label .lbl-main {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text-1);
+        margin-bottom: 4px;
+    }
+    .file-label small {
+        color: var(--text-3);
+        font-size: 11px;
+    }
+
+    .create-btn {
+        background: var(--grad-gold);
+        color: #1a1408;
+        border: none;
+        padding: 14px 20px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 800;
+        cursor: pointer;
+        width: 100%;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        box-shadow: 0 8px 24px rgba(251, 191, 36, 0.25);
+    }
+    .create-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px rgba(251, 191, 36, 0.4);
+    }
+    .create-btn:active { transform: translateY(0); }
+
+    /* ============ SERVER CARDS ============ */
+    .server-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 18px;
+    }
+    .server-card {
+        background: linear-gradient(160deg, rgba(35, 28, 15, 0.9), rgba(15, 12, 6, 0.95));
+        border: 1px solid var(--line-gold);
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.3s var(--ease);
+    }
+    .server-card:hover {
+        transform: translateY(-3px);
+        border-color: var(--line-gold-strong);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    }
+    .server-card.running {
+        border-color: rgba(74, 222, 128, 0.4);
+        box-shadow: 0 0 20px rgba(74, 222, 128, 0.1);
+    }
+    .server-header {
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--line-gold);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.25);
+        gap: 10px;
+    }
+    .server-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--gold-1);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .server-date {
+        font-size: 10px;
+        color: var(--text-3);
+        margin-top: 3px;
+        display: flex; align-items: center; gap: 4px;
+    }
+    .server-status {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 9.5px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+        font-family: 'Orbitron', sans-serif;
+    }
+    .status-running {
+        background: rgba(74, 222, 128, 0.12);
+        color: var(--ok);
+        border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+    .status-running i { font-size: 6px; }
+    .status-stopped {
+        background: rgba(251, 113, 133, 0.1);
+        color: var(--err);
+        border: 1px solid rgba(251, 113, 133, 0.3);
+    }
+    .status-stopped i { font-size: 6px; }
+
+    .server-config {
+        padding: 14px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .config-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+    }
+    .config-label {
+        color: var(--text-3);
+        font-weight: 600;
+    }
+    .config-value {
+        color: var(--gold-2);
+        font-weight: 700;
+    }
+
+    .server-actions {
+        padding: 14px 18px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        border-top: 1px solid var(--line-gold);
+        background: rgba(0, 0, 0, 0.15);
+    }
+    .action-btn {
+        padding: 10px 8px;
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        font-size: 11.5px;
+        letter-spacing: 0.5px;
+    }
+    .action-btn.start {
+        background: rgba(74, 222, 128, 0.1);
+        color: var(--ok);
+        border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+    .action-btn.start:hover {
+        background: var(--ok);
+        color: #0a0a0f;
+    }
+    .action-btn.stop {
+        background: rgba(251, 113, 133, 0.1);
+        color: var(--err);
+        border: 1px solid rgba(251, 113, 133, 0.3);
+    }
+    .action-btn.stop:hover {
+        background: var(--err);
+        color: #fff;
+    }
+    .action-btn.restart {
+        background: rgba(251, 191, 36, 0.1);
+        color: var(--gold-2);
+        border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+    .action-btn.restart:hover {
+        background: var(--gold-2);
+        color: #1a1408;
+    }
+    .action-btn.logs {
+        background: rgba(96, 165, 250, 0.1);
+        color: #60a5fa;
+        border: 1px solid rgba(96, 165, 250, 0.3);
+    }
+    .action-btn.logs:hover {
+        background: #60a5fa;
+        color: #0a0a0f;
+    }
+    .action-btn.delete {
+        background: rgba(251, 113, 133, 0.08);
+        color: #fb7185;
+        border: 1px solid rgba(251, 113, 133, 0.25);
+    }
+    .action-btn.delete:hover {
+        background: #fb7185;
+        color: #fff;
+    }
+    .action-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* ============ EMPTY ============ */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-3);
+    }
+    .empty-state i {
+        font-size: 3.5rem;
+        color: var(--gold-3);
+        opacity: 0.4;
+        margin-bottom: 20px;
+        display: block;
+    }
+    .empty-state h3 {
+        color: var(--text-2);
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+    .empty-state p {
+        font-size: 13px;
+        margin-bottom: 20px;
+    }
+
+    /* ============ MODAL ============ */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(5, 5, 8, 0.92);
+        backdrop-filter: blur(8px);
+        z-index: 2000;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+    }
+    .modal-overlay.show {
+        display: flex;
+        animation: fadeIn 0.25s ease;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    .modal-content {
+        width: 100%;
+        max-width: 900px;
+        height: 80vh;
+        max-height: 700px;
+        background: linear-gradient(160deg, #14141c, #0a0a0f);
+        border: 1px solid var(--line-gold-strong);
+        border-radius: 16px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8),
+                    0 0 40px rgba(251, 191, 36, 0.2);
+        animation: slideUp 0.3s ease;
+    }
+    .modal-header {
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--line-gold);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.4);
+        gap: 12px;
+    }
+    .modal-header .term-dots {
+        display: flex; gap: 6px;
+    }
+    .modal-header .term-dots span {
+        width: 10px; height: 10px; border-radius: 50%;
+    }
+    .modal-header .term-dots span:nth-child(1) { background: #fb7185; }
+    .modal-header .term-dots span:nth-child(2) { background: #fbbf24; }
+    .modal-header .term-dots span:nth-child(3) { background: #4ade80; }
+    .modal-header h3 {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        color: var(--gold-2);
+        font-weight: 600;
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .close-modal {
+        background: none;
+        border: none;
+        color: var(--text-2);
+        font-size: 20px;
+        cursor: pointer;
+        padding: 4px 8px;
+        transition: color 0.2s;
+    }
+    .close-modal:hover { color: var(--err); }
+    .logs-container {
+        flex: 1;
+        padding: 14px;
+        background: #050508;
+        overflow-y: auto;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+    .log-line {
+        padding: 2px 4px;
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+
+    /* ============ TOAST ============ */
+    .toast {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        padding: 12px 20px;
+        border-radius: 12px;
+        background: rgba(20, 20, 28, 0.98);
+        color: var(--text-1);
+        font-size: 13px;
+        font-weight: 600;
+        border: 1px solid var(--line-gold-strong);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6),
+                    0 0 30px rgba(251, 191, 36, 0.2);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s var(--ease);
+        z-index: 3000;
+        backdrop-filter: blur(20px);
+        max-width: calc(100vw - 32px);
+    }
+    .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+        pointer-events: auto;
+    }
+    .toast.success { border-color: rgba(74, 222, 128, 0.4); }
+    .toast.success i { color: var(--ok); }
+    .toast.error { border-color: rgba(251, 113, 133, 0.4); }
+    .toast.error i { color: var(--err); }
+    .toast.warning { border-color: rgba(251, 191, 36, 0.4); }
+    .toast.warning i { color: var(--gold-2); }
+
+    /* ============ SPINNER ============ */
+    .spinner {
+        display: inline-block;
+        width: 16px; height: 16px;
+        border: 2px solid rgba(251, 191, 36, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--gold-2);
+        animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ============ FOOTER CREDIT ============ */
+    .credit-footer {
+        text-align: center;
+        padding: 24px 20px;
+        color: var(--text-3);
+        font-size: 10.5px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+    .credit-footer b { color: var(--gold-2); font-weight: 800; }
+    .credit-footer i { color: var(--gold-3); }
+
+    /* ============ MOBILE ============ */
+    @media (max-width: 900px) {
+        .header {
+            padding: 12px 14px;
+            padding-top: calc(12px + env(safe-area-inset-top));
+        }
+        .logo-mark { width: 38px; height: 38px; font-size: 17px; border-radius: 10px; }
+        .logo-text h1 { font-size: 16px; }
+        .logo-text small { font-size: 7px; letter-spacing: 2px; }
+        .user-chip { padding: 4px 10px 4px 4px; font-size: 11px; }
+        .user-avatar { width: 24px; height: 24px; font-size: 11px; }
+        .logout-btn { padding: 8px 12px; font-size: 11px; }
+        .logout-btn span { display: none; }
+        .logout-btn i { font-size: 13px; }
+
+        .container { padding: 16px 14px 32px; }
+
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .stat-card { padding: 14px 10px; border-radius: 14px; }
+        .stat-card i { font-size: 1.4rem; margin-bottom: 6px; }
+        .stat-card h3 { font-size: 1.4rem; }
+        .stat-card p { font-size: 9px; letter-spacing: 1px; }
+        .unlimited-badge { font-size: 8px; padding: 2px 8px; }
+
+        .card { padding: 18px 16px; border-radius: 16px; margin-bottom: 16px; }
+        .section-title { font-size: 12px; margin-bottom: 16px; letter-spacing: 1.5px; }
+
+        .form-grid { grid-template-columns: 1fr; gap: 12px; margin-bottom: 16px; }
+        .form-control { padding: 12px 14px; font-size: 14px; }
+        .form-group label { font-size: 10px; }
+
+        .file-label { padding: 24px 16px; border-radius: 12px; }
+        .file-label i { font-size: 1.8rem; }
+        .file-label .lbl-main { font-size: 13px; }
+
+        .create-btn { padding: 13px 18px; font-size: 13px; letter-spacing: 1px; }
+
+        .server-list { grid-template-columns: 1fr; gap: 14px; }
+        .server-card { border-radius: 14px; }
+        .server-header { padding: 14px 14px; }
+        .server-name { font-size: 14px; }
+        .server-config { padding: 12px 14px; }
+        .server-actions { padding: 12px 14px; gap: 7px; }
+        .action-btn { padding: 11px 6px; font-size: 11px; }
+
+        .modal-content { height: 90dvh; max-height: none; border-radius: 14px; }
+        .logs-container { font-size: 11px; padding: 12px; }
+
+        .toast { bottom: 20px; font-size: 12px; padding: 10px 16px; }
+
+        .empty-state { padding: 40px 16px; }
+        .empty-state i { font-size: 3rem; }
+
+        .credit-footer { font-size: 9px; padding: 20px 14px; letter-spacing: 1.5px; }
+    }
+    @media (max-width: 380px) {
+        .user-chip span { display: none; }
+        .logo-text h1 { font-size: 14px; }
+        .stat-card h3 { font-size: 1.2rem; }
+        .action-btn { font-size: 10px; padding: 10px 4px; }
+    }
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+
+<!-- ============ HEADER ============ -->
+<header class="header">
+    <div class="logo-wrap">
+        <div class="logo-mark"><i class="fa-solid fa-crown"></i></div>
+        <div class="logo-text">
+            <h1>MASTER HOSTING</h1>
+            <small>PREMIUM · UNLIMITED</small>
+        </div>
+    </div>
+    <div class="user-info">
+        <div class="user-chip">
+            <div class="user-avatar">{{ session['username'][0]|upper }}</div>
+            <span>{{ session['username'] }}</span>
+        </div>
+        <a href="/logout" class="logout-btn" title="Logout">
+            <i class="fa-solid fa-power-off"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+</header>
+
+<div class="container">
+    <!-- ============ STATS ============ -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <i class="fa-solid fa-server"></i>
+            <h3 id="total-servers">0</h3>
+            <p>Total Servers</p>
+        </div>
+        <div class="stat-card">
+            <i class="fa-solid fa-play-circle"></i>
+            <h3 id="running-servers">0</h3>
+            <p>Running Now</p>
+        </div>
+        <div class="stat-card">
+            <i class="fa-solid fa-infinity"></i>
+            <h3>∞</h3>
+            <p>No Limit</p>
+            <div class="unlimited-badge"><i class="fa-solid fa-bolt"></i> UNLIMITED</div>
+        </div>
+        <div class="stat-card">
+            <i class="fa-solid fa-gem"></i>
+            <h3>FREE</h3>
+            <p>Forever</p>
+            <div class="unlimited-badge"><i class="fa-solid fa-crown"></i> PREMIUM</div>
+        </div>
+    </div>
+
+    <!-- ============ CREATE ============ -->
+    <section class="card">
+        <h2 class="section-title">
+            <i class="fa-solid fa-circle-plus"></i>
+            Deploy New Server
+        </h2>
+
+        <form id="createServerForm" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="create_server">
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="server_name"><i class="fa-solid fa-server"></i> Server Name</label>
+                    <input type="text" id="server_name" name="server_name"
+                           class="form-control" placeholder="my-server"
+                           required minlength="2" maxlength="40">
+                    <div class="form-hint">Spaces converted to underscores</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="server_type"><i class="fa-solid fa-code"></i> Server Type</label>
+                    <select id="server_type" name="server_type" class="form-control">
+                        <option value="web">🌐 Web Application</option>
+                        <option value="bot">🤖 Bot Application</option>
+                        <option value="api">⚡ API Server</option>
+                        <option value="custom">🔧 Custom</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="port"><i class="fa-solid fa-plug"></i> Port</label>
+                    <input type="number" id="port" name="port"
+                           class="form-control" value="8080"
+                           min="1024" max="65535">
+                </div>
+            </div>
+
+            <div class="file-upload">
+                <input type="file" id="server_files" name="server_files"
+                       accept=".zip,.py,.txt,.json">
+                <div class="file-label" id="fileLabel">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <div class="lbl-main">Drop ZIP or click to browse</div>
+                    <small>.zip · .py · .txt · .json — max 100 MB</small>
+                </div>
+            </div>
+
+            <button type="submit" class="create-btn">
+                <i class="fa-solid fa-rocket"></i> Deploy Server
+            </button>
+        </form>
+    </section>
+
+    <!-- ============ SERVERS ============ -->
+    <section class="card">
+        <h2 class="section-title">
+            <i class="fa-solid fa-layer-group"></i>
+            Your Servers
+            <span class="count-badge">{{ servers|length }}</span>
+        </h2>
+
+        {% if servers %}
+        <div class="server-list" id="serverList">
+            {% for server in servers %}
+            <div class="server-card {{ 'running' if server.running else '' }}"
+                 id="server-{{ server.name }}">
+                <div class="server-header">
+                    <div>
+                        <div class="server-name">{{ server.display_name }}</div>
+                        <div class="server-date">
+                            <i class="fa-regular fa-clock"></i>
+                            {{ server.created_at[:10] if server.created_at else 'N/A' }}
+                        </div>
+                    </div>
+                    <div class="server-status {{ 'status-running' if server.running else 'status-stopped' }}">
+                        <i class="fa-solid fa-circle"></i>
+                        {{ 'RUNNING' if server.running else 'STOPPED' }}
+                    </div>
+                </div>
+
+                <div class="server-config">
+                    <div class="config-item">
+                        <span class="config-label">Type</span>
+                        <span class="config-value">
+                            {% if server.config.type == 'web' %}🌐 WEB{% endif %}
+                            {% if server.config.type == 'bot' %}🤖 BOT{% endif %}
+                            {% if server.config.type == 'api' %}⚡ API{% endif %}
+                            {% if server.config.type == 'custom' %}🔧 CUSTOM{% endif %}
+                        </span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-label">Port</span>
+                        <span class="config-value">{{ server.config.port }}</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-label">Files</span>
+                        <span class="config-value">
+                            {{ '✅ Uploaded' if server.has_files else '❌ None' }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="server-actions">
+                    {% if server.running %}
+                    <button class="action-btn stop" onclick="controlServer('{{ server.name }}', 'stop')">
+                        <i class="fa-solid fa-stop"></i> Stop
+                    </button>
+                    {% else %}
+                    <button class="action-btn start" onclick="controlServer('{{ server.name }}', 'start')">
+                        <i class="fa-solid fa-play"></i> Start
+                    </button>
+                    {% endif %}
+                    <button class="action-btn restart" onclick="controlServer('{{ server.name }}', 'restart')">
+                        <i class="fa-solid fa-rotate"></i> Restart
+                    </button>
+                    <button class="action-btn logs" onclick="showLogs('{{ server.name }}')">
+                        <i class="fa-solid fa-terminal"></i> Logs
+                    </button>
+                    <button class="action-btn delete" onclick="deleteServer('{{ server.name }}')">
+                        <i class="fa-solid fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fa-solid fa-server"></i>
+            <h3>No servers yet</h3>
+            <p>Deploy your first server using the form above</p>
+            <div style="display:inline-flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+                <div style="background:rgba(251,191,36,.1); padding:6px 14px; border-radius:20px; border:1px solid var(--line-gold-strong); font-size:11px; font-weight:700; color:var(--gold-2);">
+                    <i class="fa-solid fa-infinity"></i> Unlimited
+                </div>
+                <div style="background:rgba(74,222,128,.1); padding:6px 14px; border-radius:20px; border:1px solid rgba(74,222,128,.3); font-size:11px; font-weight:700; color:#4ade80;">
+                    <i class="fa-solid fa-bolt"></i> Free
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </section>
+
+    <div class="credit-footer">
+        <i class="fa-solid fa-crown"></i> Powered by <b>MASTER HOSTING</b> <i class="fa-solid fa-crown"></i>
+    </div>
+</div>
+
+<!-- ============ MODAL ============ -->
+<div class="modal-overlay" id="logsModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="term-dots"><span></span><span></span><span></span></div>
+            <h3 id="modalTitle">Server Logs</h3>
+            <button class="close-modal" onclick="closeLogs()" aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="logs-container" id="logsContainer">
+            <div class="log-line" style="color:var(--text-3);">Loading...</div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentServerLogs = null;
+let logsInterval = null;
+
+function showToast(message, type = 'info') {
+    let t = document.getElementById('toast');
+    if (!t) {
+        t = document.createElement('div');
+        t.id = 'toast';
+        document.body.appendChild(t);
+    }
+    const icons = {
+        success: 'fa-circle-check',
+        error: 'fa-circle-exclamation',
+        warning: 'fa-triangle-exclamation',
+        info: 'fa-circle-info'
+    };
+    t.className = 'toast show ' + type;
+    t.innerHTML = `<i class="fa-solid ${icons[type] || icons.info}"></i> ${message}`;
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+async function controlServer(serverName, action) {
+    const btn = event?.target?.closest('button');
+    let originalHTML;
+    if (btn) {
+        btn.disabled = true;
+        originalHTML = btn.innerHTML;
+        btn.innerHTML = '<span class="spinner"></span>';
+    }
+
+    try {
+        const r = await fetch(`/api/server/${action}/${encodeURIComponent(serverName)}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await r.json();
+        if (r.ok) {
+            showToast(data.message, 'success');
+            setTimeout(() => location.reload(), 1200);
+        } else {
+            showToast(data.error || 'Operation failed', 'error');
+            if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; }
+        }
+    } catch (e) {
+        showToast('Network error: ' + e.message, 'error');
+        if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; }
+    }
+}
+
+async function deleteServer(serverName) {
+    if (!confirm(`Delete "${serverName}"?\nThis cannot be undone!`)) return;
+    const card = document.getElementById(`server-${serverName}`);
+    if (card) card.style.opacity = '0.5';
+    showToast(`Deleting ${serverName}...`, 'warning');
+
+    try {
+        const r = await fetch(`/api/server/delete/${encodeURIComponent(serverName)}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await r.json();
+        if (r.ok) {
+            showToast(data.message, 'success');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showToast(data.error || 'Delete failed', 'error');
+            if (card) card.style.opacity = '1';
+        }
+    } catch (e) {
+        showToast('Network error: ' + e.message, 'error');
+        if (card) card.style.opacity = '1';
+    }
+}
+
+function showLogs(serverName) {
+    currentServerLogs = serverName;
+    document.getElementById('modalTitle').textContent = `${serverName} — live logs`;
+    document.getElementById('logsModal').classList.add('show');
+    updateLogs();
+    if (logsInterval) clearInterval(logsInterval);
+    logsInterval = setInterval(updateLogs, 2000);
+}
+
+function closeLogs() {
+    document.getElementById('logsModal').classList.remove('show');
+    if (logsInterval) {
+        clearInterval(logsInterval);
+        logsInterval = null;
+    }
+}
+
+async function updateLogs() {
+    if (!currentServerLogs) return;
+    try {
+        const r = await fetch(`/api/logs/${encodeURIComponent(currentServerLogs)}`);
+        const logs = await r.text();
+        const c = document.getElementById('logsContainer');
+        c.innerHTML = logs.split('\n').map(line => {
+            let color = '#a8b0c8';
+            if (/ERROR|error|Error/.test(line)) color = '#fb7185';
+            else if (/WARNING|Warning|warn/.test(line)) color = '#fbbf24';
+            else if (/INFO|Info/.test(line)) color = '#60a5fa';
+            else if (/SUCCESS|Success/.test(line)) color = '#4ade80';
+            else if (/RUNNING|Started/.test(line)) color = '#fbbf24';
+            return `<div class="log-line" style="color:${color}">${escapeHtml(line)}</div>`;
+        }).join('');
+        c.scrollTop = c.scrollHeight;
+    } catch (e) { /* ignore */ }
+}
+
+function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[ch]));
+}
+
+async function updateStats() {
+    try {
+        const r = await fetch('/api/stats');
+        const stats = await r.json();
+        document.getElementById('total-servers').textContent = stats.total_servers;
+        document.getElementById('running-servers').textContent = stats.running_servers;
+
+        const sr = await fetch('/api/servers');
+        const servers = await sr.json();
+        servers.forEach(s => {
+            const card = document.getElementById(`server-${s.name}`);
+            if (!card) return;
+            const status = card.querySelector('.server-status');
+            if (s.running) {
+                card.classList.add('running');
+                status.className = 'server-status status-running';
+                status.innerHTML = '<i class="fa-solid fa-circle"></i> RUNNING';
+            } else {
+                card.classList.remove('running');
+                status.className = 'server-status status-stopped';
+                status.innerHTML = '<i class="fa-solid fa-circle"></i> STOPPED';
+            }
+        });
+    } catch (e) { /* ignore */ }
+}
+
+document.getElementById('server_files')?.addEventListener('change', function() {
+    const label = document.getElementById('fileLabel');
+    if (this.files.length > 0) {
+        label.innerHTML = `
+            <i class="fa-solid fa-check-circle" style="color:#4ade80"></i>
+            <div class="lbl-main">✅ Ready to upload</div>
+            <small>${this.files[0].name}</small>
+        `;
+        label.style.borderColor = 'rgba(74, 222, 128, 0.5)';
+        label.style.background = 'rgba(74, 222, 128, 0.06)';
+    }
+});
+
+setInterval(updateStats, 5000);
+
+document.addEventListener('DOMContentLoaded', () => {
+    updateStats();
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeLogs();
+    });
+    document.getElementById('logsModal').addEventListener('click', e => {
+        if (e.target.id === 'logsModal') closeLogs();
+    });
+
+    document.getElementById('createServerForm')?.addEventListener('submit', function(e) {
+        const name = document.getElementById('server_name').value.trim();
+        if (!name) {
+            e.preventDefault();
+            showToast('Please enter a server name', 'error');
+            return;
+        }
+        const btn = this.querySelector('button[type="submit"]');
+        btn.innerHTML = '<span class="spinner"></span> Deploying...';
+        btn.disabled = true;
+    });
+
+    setTimeout(() => showToast('Welcome to MASTER HOSTING! Unlimited servers ready 🚀', 'success'), 600);
+});
+</script>
+</body>
+</html>
